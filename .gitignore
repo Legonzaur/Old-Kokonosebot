@@ -1,2 +1,4 @@
 
 token.json
+*.json
+nohup.out
