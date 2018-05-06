@@ -37,6 +37,8 @@ client.on('ready', () => {
   });
 
 client.on('message', msg => {
+
+	if(msg.author.bot) return;
   //Emoji custom
   initialisePreferences(msg)
     if(preferences.emojiCustom[msg.author.id]){
@@ -123,7 +125,7 @@ client.on('message', msg => {
           msg.channel.fetchMessage(args[0])
           .then(function(message){
             msg.delete()
-            if(message.author.id == "421371597706887208")
+            if(message.author.id)
             message.delete()
           })
           }
