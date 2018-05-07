@@ -10,15 +10,9 @@ const utils = require("./utils.js")
 var emojiUsed = utils.createJsonFile("emojiUsed.json");
 const preferences = utils.createJsonFile("preferences.json");
 
-function saveFile(fileName, file){
-  fs.writeFile(fileName +".json", JSON.stringify(file), function(err) {
-    if (err) return console.log(err);
-  });
-  }
-
 var midnight = schedule.scheduleJob({hour: 0, minute: 0}, function(){
-  saveFile("emojiUsed", emojiUsed);
-  saveFile("preferences", preferences);
+  utils.saveFile("emojiUsed", emojiUsed);
+  utils.saveFile("preferences", preferences);
   });
 
 function initialiseEmoji(msg){
@@ -32,18 +26,20 @@ function initialisePreferences(msg){
   if(typeof(preferences.emojiCustom[msg.author.id]) == "undefined") preferences.emojiCustom[msg.author.id] = true;
   }
 
+
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   });
 
 client.on('message', msg => {
-
-	if(msg.author.bot) return;
+  if (msg.author.bot) return null;
   //Emoji custom
   initialisePreferences(msg)
     if(preferences.emojiCustom[msg.author.id]){
       if(client.guilds.find("id", "434283741775396864").emojis.exists("name", msg.content.toLowerCase())){
         utils.postCustomEmoji(msg, msg.author, msg.content, client)
+        return null;
         }
       }
 
@@ -62,12 +58,15 @@ client.on('message', msg => {
     //Trucs inutiles
     if (msg.author.id == '172002275412279296' && msg.content.split('leveled up!')[0] != msg.content) {
       msg.channel.send('Agression!');
+      return null;
       } 
     if (msg.content.toLowerCase().startsWith("bonjour")){
       msg.reply("Bonsoir!");
+      return null;
       }
     if (msg.content.toLowerCase().startsWith("bonsoir")){
       msg.reply("Bonjour!");
+      return null;
       }
 
   //Commandes
@@ -83,36 +82,45 @@ client.on('message', msg => {
     if(command.toLowerCase() == 'ping') {
       msg.channel.startTyping()
       msg.channel.send("Pong! Avec " + client.ping + "ms").then(function(){msg.channel.stopTyping()});
+      return null;
       }
     if(command.toLowerCase() == "save"){
       msg.delete().then(function(){
-        saveFile("emojiUsed", emojiUsed);
-        saveFile("preferences", preferences);           
+        utils.saveFile("emojiUsed", emojiUsed);
+        utils.saveFile("preferences", preferences);
+        return null;
       });
       }
     if(command.toLowerCase() == "help"){
       var embed = new Discord.RichEmbed();
       embed.setAuthor("Kokonosebot", "https://cdn.discordapp.com/app-icons/421371597706887208/e15b3459004f5f1c846a537a67cbe1c0.png");
       embed.setColor("76D138");
-      embed.set
-      msg.channel.send(embed)
+      //embed.set
+      msg.channel.send(embed);
+      return null;
  
       }
-    if(command == "stop") msg.channel.stopTyping()
+    if(command == "stop"){
+      msg.channel.stopTyping();
+      return null;
+    } 
     if(command.toLowerCase() == "$"){
-      functions.customEmoji(msg, args, client)
+      functions.customEmoji(msg, args, client);
+      return null;
       }
     if(command.toLowerCase() == "off"){
       preferences.emojiCustom[msg.author.id] = false;
       msg.reply("Votre demande a bien été prise en compte").then(function(){
-        saveFile("preferences", preferences);
+        utils.saveFile("preferences", preferences);
+        return null;
       })
       
       }
     if(command.toLowerCase() == "on"){
       preferences.emojiCustom[msg.author.id] = true;
       msg.reply("Votre demande a bien été prise en compte").then(function(){
-        saveFile("preferences", preferences);
+        utils.saveFile("preferences", preferences);
+        return null;
       })
 
       
@@ -125,7 +133,7 @@ client.on('message', msg => {
           msg.channel.fetchMessage(args[0])
           .then(function(message){
             msg.delete()
-            if(message.author.id)
+            if(message.author.id == "421371597706887208")
             message.delete()
           })
           }
@@ -137,11 +145,14 @@ client.on('message', msg => {
             }, "rythm faut du kk").then(function(){
               msg.member.addRole(msg.guild.roles.find("name", "DJ").id)
             })
+          }else{
+            msg.member.addRole(msg.guild.roles.find("name", "DJ").id);
           }
           }
         if(command.toLowerCase() == "dj" && args[0] == "off"){
-          msg.delete();
+              msg.delete();
               msg.member.removeRole(msg.guild.roles.find("name", "DJ").id)
+              return null;
             
           }
         

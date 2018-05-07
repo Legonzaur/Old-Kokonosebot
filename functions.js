@@ -31,9 +31,11 @@ module.exports = {
             if(emojiSorted[i]) embed.addField("\u200b", `<:${msg.guild.emojis.find("id", emojiSorted[i]).name}:${emojiSorted[i]}>  :  ${request[emojiSorted[i]]}`);
           }
           msg.channel.send(embed).then(function(){msg.channel.stopTyping()});
+          return null;
         }else{
           msg.channel.send("Aucune donnée pour cette entrée").then(function(){
             msg.channel.stopTyping()
+            return null;
           }
             
           );
@@ -49,7 +51,7 @@ module.exports = {
         embed.setAuthor(utils.getNickname(msg, msg.author.id), msg.author.displayAvatarURL);
         var customEmoji =  client.guilds.find("id", "434283741775396864").emojis.array()
         for(var i = 0; i< customEmoji.length; i+=2){
-          var table = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:", ":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:", ":regional_indicator_d:", ":regional_indicator_e:", ":regional_indicator_f:", ":regional_indicator_g:", ":regional_indicator_h:"]
+          var table = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:", ":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:", ":regional_indicator_d:", ":regional_indicator_e:", ":regional_indicator_f:", ":regional_indicator_g:", ":regional_indicator_h:", ":regional_indicator_i:", ":regional_indicator_j:", ":regional_indicator_k:", ":regional_indicator_l:", ":regional_indicator_m:", ":regional_indicator_n:"]
           if(!customEmoji[i+1]){
             var second = ""
             var secondname = ""
@@ -79,9 +81,14 @@ module.exports = {
             collectorReaction.on('collect', r => utils.postCustomEmoji(message, msg.author, r.emoji.name, client));
             var collectorMessage = new Discord.MessageCollector(msg.channel, m => m.author.id == msg.author.id, { time: 25000 })
             collectorMessage.on('collect', mesg => {
-                    if(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"].indexOf(mesg.content.toLowerCase()) != -1){
+                    if(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n"].indexOf(mesg.content.toLowerCase()) != -1){
                         message.delete()
-                        utils.postCustomEmoji(mesg, msg.author, customEmoji[["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"].indexOf(mesg.content.toLowerCase())].name, client)
+                        if(customEmoji[["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n"].indexOf(mesg.content.toLowerCase())]){
+                          utils.postCustomEmoji(mesg, msg.author, customEmoji[["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n"].indexOf(mesg.content.toLowerCase())].name, client);
+                          collectorMessage.stop();
+                          collectorReaction.stop();
+                          
+                        } 
                      }
                 })
             message.delete(25000)
