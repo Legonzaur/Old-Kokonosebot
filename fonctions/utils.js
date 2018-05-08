@@ -13,10 +13,10 @@ function getNickname(msg, userId) {
 module.exports = {
   createJsonFile: function (fileName) {
       try{
-        return file = require("./"+fileName);
+        return file = require("../jsons/"+fileName);
       }catch (err){
         console.log(err)
-        fs.appendFile(fileName, '{}', function (err) {
+        fs.appendFile("../jsons/" + fileName, '{}', function (err) {
           if (err) throw err;
           console.log('Saved!');  
         });
@@ -37,6 +37,11 @@ module.exports = {
             msg.channel.stopTyping()
           })
       })
-    }
+    },
+    saveFile : function(fileName, file){
+      fs.writeFile("./jsons/" + fileName +".json", JSON.stringify(file), function(err) {
+        if (err) return console.log(err);
+      });
+      }
   };
   
