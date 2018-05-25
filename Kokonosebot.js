@@ -179,32 +179,7 @@ client.on('message', msg => {
             message.delete()
           })
           }
-        if(command.toLowerCase() == "dj" && args[0] == "on"){
-          msg.delete();
-          if(!msg.guild.roles.find("name","DJ")){
-            msg.guild.createRole({
-              name: 'DJ',
-            }, "rythm faut du kk").then(function(){
-              msg.member.addRole(msg.guild.roles.find("name", "DJ").id)
-            })
-          }else{
-            msg.member.addRole(msg.guild.roles.find("name", "DJ").id);
-          }
-          }
-        if(command.toLowerCase() == "dj" && args[0] == "off"){
-              msg.delete();
-              msg.member.removeRole(msg.guild.roles.find("name", "DJ").id)
-              return null;
-            
-          }
-        
-          }
-
-      
-  
-        
-        
-    
+      }
     
     }
 });
