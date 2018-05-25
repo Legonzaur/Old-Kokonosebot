@@ -207,6 +207,14 @@ client.on('message', msg => {
     
     
     }
-  });
+});
+
+client.on("messageDelete", msg =>{
+  if(msg.guild.id == "230405441845329930"){
+    if(Date.now() - msg.createdTimestamp  < 60000){
+      client.guilds.find("id", "434283741775396864").channels.find("id", "449660541582180374").send(msg.author.username + " deleted his message : " + msg.content)
+    }
+  }
+});
 client.login(token.token);
 client.on('error',console.error);
