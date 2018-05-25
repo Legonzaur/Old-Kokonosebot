@@ -1,11 +1,14 @@
 const Discord = require("discord.js"); 
 const fs = require("fs");
 
-function getNickname(msg, userId) {
-  if(msg.guild.members.get(userId).nickname){
-    var nickname = msg.guild.members.get(userId).nickname
+function getNickname(msg, userId, guild) {
+  if(!guild){
+    var guild = msg.guild;
+  }
+  if(guild.members.get(userId).nickname){
+    var nickname = guild.members.get(userId).nickname
     }else{
-    var nickname = msg.guild.members.get(userId).user.username
+    var nickname = guild.members.get(userId).user.username
     }
   return nickname
     

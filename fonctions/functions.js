@@ -6,7 +6,7 @@ module.exports = {
     emoji: function (msg, args,) {
         
         
-        msg.channel.startTyping()
+        
         if(!args[0]){
           var request = emojiUsed[msg.guild.id][msg.author.id];
           var nickname = utils.getNickname(msg, msg.author.id);
@@ -30,11 +30,11 @@ module.exports = {
           for(var i = 0; i<8; i++){
             if(emojiSorted[i]) embed.addField("\u200b", `<:${msg.guild.emojis.find("id", emojiSorted[i]).name}:${emojiSorted[i]}>  :  ${request[emojiSorted[i]]}`);
           }
-          msg.channel.send(embed).then(function(){msg.channel.stopTyping()});
+          msg.channel.send(embed);
           return null;
         }else{
           msg.channel.send("Aucune donnée pour cette entrée").then(function(){
-            msg.channel.stopTyping()
+            
             return null;
           }
             
@@ -44,7 +44,7 @@ module.exports = {
             },
     customEmoji: function (msg, args, client) {
         msg.delete()
-        msg.channel.startTyping()
+        
         var embed = new Discord.RichEmbed({
             title : "Liste des emoji",
             });
@@ -63,7 +63,7 @@ module.exports = {
             embed.addField(table[i] + " : " + customEmoji[i] +customEmoji[i].name, table[i+1] + " : " + second + secondname)
              }
         msg.channel.send(embed).then(message =>{
-            msg.channel.stopTyping()
+            
             var i = 0
             loop(i)
             function loop(i){

@@ -35,12 +35,17 @@ function initialiseGameUser(msg){
   if(!gameData.users[msg.author.id]){
     gameData.users[msg.author.id] = {};
     gameData.users[msg.author.id].stats = {};
+    gameData.users[msg.author.id].stats.level = 1;
+    gameData.users[msg.author.id].stats.xp = 0;
     gameData.users[msg.author.id].stats.health = 20;
     gameData.users[msg.author.id].stats.maxHealth = 20;
     gameData.users[msg.author.id].stats.mana = 10;
     gameData.users[msg.author.id].stats.maxMana = 10;
     gameData.users[msg.author.id].stats.money = 0;
     gameData.users[msg.author.id].attributes = {};
+    gameData.users[msg.author.id].power = {};
+    gameData.users[msg.author.id].power.decieving = {};
+    gameData.users[msg.author.id].power.decieving.active = false;
   } 
 }
 
@@ -51,6 +56,13 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
+  if(msg.channel.type === "dm"){
+    if (game[msg.content.replace("$", "").split(" ")[0]]){
+      game[msg.content.replace("$", "").split(" ")[0]](msg, client)
+      
+    }
+    return null;
+  }
   if (msg.author.bot) return null;
   //Emoji custom
   initialisePreferences(msg)
@@ -106,8 +118,7 @@ client.on('message', msg => {
     }
     //ping
     if(command.toLowerCase() == 'ping') {
-      msg.channel.startTyping()
-      msg.channel.send("Pong! Avec " + client.ping + "ms").then(function(){msg.channel.stopTyping()});
+      msg.channel.send("Pong! Avec " + client.ping + "ms");
       return null;
     }
       //save
